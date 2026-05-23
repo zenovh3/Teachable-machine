@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Muziek maken</title>
+</head>
+<body>
+  <h1>🍎 Clap Sort 🥦</h1>
+  <p id="subtitle">Sort fruits & veggies with your claps!</p>
+
+  <div id="score-row">
+    <div class="score-card">✅ Correct <span id="score-correct">0</span></div>
+    <div class="score-card">❌ Wrong <span id="score-wrong">0</span></div>
+    <div class="score-card">📦 Total <span id="score-total">0</span>/10</div>
+  </div>
+
+  <div id="status-bar">Press <strong>Start Game</strong> to begin!</div>
+
+  <div id="arena">
+    <div id="clap-flash"></div>
+    <div class="bin" id="bin-left">
+      <div class="bin-emoji">🍎</div>
+      <div class="bin-label">Fruits</div>
+      <div class="bin-hint">1 clap</div>
+    </div>
+    <div class="bin" id="bin-right">
+      <div class="bin-emoji">🥦</div>
+      <div class="bin-label">Veggies</div>
+      <div class="bin-hint">2 claps</div>
+    </div>
+    <div id="result-overlay">
+      <div id="result-title"></div>
+      <div id="result-sub"></div>
+      <button onclick="restartGame()">Play again 🎉</button>
+    </div>
+  </div>
+
+   <div id="clap-indicator">—</div>
+  <div id="clap-dots"></div>
+
+  <div id="controls">
+    <button id="btn-start" onclick="startGame()">▶ Start Game</button>
+    <button id="btn-demo1" onclick="demoClap(1)">Demo 1 clap</button>
+    <button id="btn-demo2" onclick="demoClap(2)">Demo 2 claps</button>
+  </div>
+  
+
+  <div id="instructions">
+    <strong>How to play:</strong><br>
+    An emoji falls from the top. Clap to sort it before it hits the ground!<br>
+    👏 <strong>1 clap</strong> → 🍎 Fruit (left bin)<br>
+    👏👏 <strong>2 claps</strong> → 🥦 Veggie (right bin)<br>
+    Allow microphone access when prompted. Use the <em>Demo</em> buttons to test without a mic.
+  </div>
+
+</body>
+</html>
+</body>
+</html>
