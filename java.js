@@ -127,3 +127,77 @@ function flashArena() {
   setTimeout(() => clapFlash.style.opacity = '0', 150);
 }
 
+function registerClap(count) {
+  if (!gameActive) {
+    startGame();
+    return;
+  }
+
+  flashArena();
+  clapIndicator.textContent = count === 1 ? '👏 1 clap!' : '👏👏 2 claps!';
+  updateClapDots(count);
+
+  if (count === 1) sortItem('left');
+  else if (count === 2) sortItem('right');
+
+  setTimeout(() => {
+    clapIndicator.textContent = '—';
+    clapDots.innerHTML = '';
+  }, 600);
+}
+
+function updateClapDots(count) {
+  clapDots.innerHTML = '';
+  for (let i = 0; i < count; i++) {
+    const dot = document.createElement('span');
+    dot.className = 'clap-dot';
+    clapDots.appendChild(dot);
+  }
+}
+
+async function startMic() {
+  try {
+    setStatus('Loading model...');
+    recognizer = await createModel();
+    const classLabels = recognizer.wordLabels();
+    console.log('Class labels:', classLabels);
+    setStatus('👏 Clap to start the game!');
+
+    recognizer.listen(result => {
+      const scores = result.scores;
+
+      let maxScore = 0;
+      let bestLabel = '';
+      classLabels.forEach((label, i) => {
+        if (scores[i] > maxScore) {
+          maxScore = scores[i];
+          bestLabel = label;
+        }
+      });
+
+      console.log('Best label:', bestLabel, 'Score:', maxScore.toFixed(2));
+
+      if (maxScore > 0.75 && clapArmed) {
+        if (bestLabel === 'clap_once') {
+          registerClap(1);
+          clapArmed = false;
+          setTimeout(() => clapArmed = true, 1000);
+        } else if (bestLabel === 'clap_twice') {
+          registerClap(2);
+          clapArmed = false;
+          setTimeout(() => clapArmed = true, 1000);
+        }
+      }
+    }, {
+      includeSpectrogram: true,
+      probabilityThreshold: 0.70,
+      invokeCallbackOnNoiseAndUnknown: true,
+      overlapFactor: 0.50
+    });
+
+  } catch (e) {
+    console.error(e);
+    setStatus('⚠️ Could not load model — check your URL');
+  }
+}
+
