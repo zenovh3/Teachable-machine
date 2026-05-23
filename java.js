@@ -68,3 +68,62 @@ function spawnItem() {
   setStatus('Sort: ' + (ANSWERS[emoji] === 'fruit' ? '🍎 Fruit = 1 clap' : '🥦 Veggie = 2 claps'));
 }
 
+function fallTick() {
+  if (!gameActive) return;
+  if (itemEl) {
+    fallY += 0.5;
+    itemEl.style.top = fallY + 'px';
+    if (fallY > 245) missItem();
+  }
+  animFrame = requestAnimationFrame(fallTick);
+}
+
+function missItem() {
+  if (!gameActive) return;
+  wrong++;
+  scoreWrong.textContent = wrong;
+  total++;
+  scoreTotal.textContent = total;
+  setStatus('Too slow! 😅');
+  nextItem();
+}
+
+function nextItem() {
+  if (itemEl) { itemEl.remove(); itemEl = null; }
+  currentItem = null;
+  fallY = 10;
+  if (total >= 10) { endGame(); return; }
+  setTimeout(spawnItem, 800);
+}
+
+function sortItem(direction) {
+  if (!currentItem || !gameActive) return;
+
+  const correctDir = ANSWERS[currentItem] === 'fruit' ? 'left' : 'right';
+  const isCorrect = direction === correctDir;
+
+  if (itemEl) {
+    itemEl.style.left = direction === 'left' ? '18%' : '82%';
+    itemEl.style.opacity = '0';
+  }
+
+  if (isCorrect) {
+    correct++;
+    scoreCorrect.textContent = correct;
+    setStatus('Correct! 🎉');
+  } else {
+    wrong++;
+    scoreWrong.textContent = wrong;
+    setStatus('Wrong! ' + (ANSWERS[currentItem] === 'fruit' ? 'That was a fruit 🍎' : 'That was a veggie 🥦'));
+  }
+
+  total++;
+  scoreTotal.textContent = total;
+  nextItem();
+}
+
+function flashArena() {
+  clapFlash.style.opacity = '1';
+  setTimeout(() => clapFlash.style.opacity = '0', 150);
+}
+
