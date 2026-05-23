@@ -33,3 +33,38 @@ let total = 0;
 let animFrame;
 let clapArmed = true;
 
+async function createModel() {
+  const recognizer = speechCommands.create(
+    "BROWSER_FFT",
+    undefined,
+    URL + "model.json",
+    URL + "metadata.json"
+  );
+  await recognizer.ensureModelLoaded();
+  return recognizer;
+}
+
+function setStatus(msg) {
+  statusBar.innerHTML = msg;
+}
+
+function spawnItem() {
+  if (!gameActive) return;
+  if (itemEl) itemEl.remove();
+
+  const all = [...FRUITS, ...VEGGIES];
+  const emoji = all[Math.floor(Math.random() * all.length)];
+  currentItem = emoji;
+  fallY = 10;
+
+  itemEl = document.createElement('div');
+  itemEl.className = 'falling-item';
+  itemEl.textContent = emoji;
+  itemEl.style.left = '50%';
+  itemEl.style.top = '10px';
+  itemEl.style.transform = 'translateX(-50%)';
+  arena.appendChild(itemEl);
+
+  setStatus('Sort: ' + (ANSWERS[emoji] === 'fruit' ? '🍎 Fruit = 1 clap' : '🥦 Veggie = 2 claps'));
+}
+
