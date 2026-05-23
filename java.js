@@ -201,3 +201,43 @@ async function startMic() {
   }
 }
 
+function startGame() {
+  correct = 0; wrong = 0; total = 0; fallY = 10;
+  scoreCorrect.textContent = 0;
+  scoreWrong.textContent = 0;
+  scoreTotal.textContent = 0;
+  resultOverlay.classList.remove('show');
+  btnStart.disabled = true;
+  gameActive = true;
+  cancelAnimationFrame(animFrame);
+  spawnItem();
+  animFrame = requestAnimationFrame(fallTick);
+}
+
+function endGame() {
+  gameActive = false;
+  cancelAnimationFrame(animFrame);
+  if (itemEl) { itemEl.remove(); itemEl = null; }
+
+  const pct = Math.round(correct / 10 * 100);
+  resultTitle.textContent = pct >= 80 ? 'Amazing! 🎉' : pct >= 50 ? 'Not bad! 😊' : 'Keep practicing! 💪';
+  resultSub.textContent = correct + ' / 10 correct (' + pct + '%)';
+  resultOverlay.classList.add('show');
+  btnStart.disabled = false;
+  setStatus('👏 Clap to play again!');
+}
+
+// event listeners
+btnStart.addEventListener('click', startGame);
+btnDemo1.addEventListener('click', () => registerClap(1));
+btnDemo2.addEventListener('click', () => registerClap(2));
+btnRestart.addEventListener('click', () => {
+  resultOverlay.classList.remove('show');
+  startGame();
+});
+
+// load model when page opens
+window.addEventListener('load', async () => {
+  await startMic();
+});
+
