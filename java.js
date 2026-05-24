@@ -1,4 +1,4 @@
-const URL = "https://teachablemachine.withgoogle.com/models/IH207Yh4c/";
+const URL = "https://teachablemachine.withgoogle.com/models/vBXKeht0V/";
 
 const statusBar = document.querySelector("#status-bar");
 const scoreCorrect = document.querySelector("#score-correct");
